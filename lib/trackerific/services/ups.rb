@@ -66,6 +66,8 @@ module Trackerific
       summary = activity.first['Status']['StatusType']['Description'].titleize
       events = []
       activity.each do |a|
+        puts a
+
         # the time format from UPS is HHMMSS, which cannot be directly converted
         # to a Ruby time.
         hours   = a['Time'][0..1]
@@ -74,7 +76,7 @@ module Trackerific
         date    = Date.parse(a['Date'])
         date    = DateTime.parse("#{date} #{hours}:#{minutes}:#{seconds}")
         desc    = a['Status']['StatusType']['Description'].titleize
-        loc     = a['ActivityLocation']['Address'].map {|k,v| v}.join(" ")
+        loc     = a['ActivityLocation']['Address'] && a['ActivityLocation']['Address'].map {|k,v| v}.join(" ")
         events << Trackerific::Event.new(
           :date         => date,
           :description  => desc,
